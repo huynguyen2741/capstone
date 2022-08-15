@@ -1,6 +1,6 @@
 package com.huy.model;
 
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -39,23 +39,37 @@ public class User {
 	private String contact;
 	@Column(name="SSN")
 	private String SSN;
-	
+	@Column(name="roles")
+	private String roles;
 	@OneToMany(mappedBy="user")
+	
 	private List<Address> addresses;
 	
-	@ManyToMany(mappedBy="users")
-	private List<Role> roles;
+	
+//	  @ManyToMany(mappedBy="users")	  
+//	  
+//	  private List<Role> roles;
+	 
 	
 	@OneToMany(mappedBy="user")
+	
 	private List<Order> orders;
 	
-	public User(String firstName, String lastName,String email, String userName,String password, String contact, String SSN) {
+	public User(String firstName, String lastName,String email, String userName,String password, String contact, String SSN, String roles) {
 		this.firstName = firstName;
 		this.lastName = lastName;		
 		this.email = email;
 		this.userName = userName;
 		this.password = password;
-		this.password = contact;
-		this.password = SSN;	
+		this.contact = contact;
+		this.password = SSN;
+		this.roles=roles;
 	}
+
+	public User(String userName, String password) {
+		super();
+		this.userName = userName;
+		this.password = password;
+	}
+	
 }

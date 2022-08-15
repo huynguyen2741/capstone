@@ -1,4 +1,6 @@
+
 package com.huy.model;
+
 
 import java.util.List;
 
@@ -19,7 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="Order")
+@Table(name="Ord")
 public class Order {
 	@Id
 	@GeneratedValue
@@ -31,6 +33,8 @@ public class Order {
 	private String date;
 	@Column(name="status")
 	private String status;
+	
+	
 	@Column(name="billingAdd")
 	private String billingAdd;	
 	@Column(name="shippingAdd")
@@ -41,17 +45,8 @@ public class Order {
 	private User user;
 	
 	@ManyToOne
-	@JoinColumn(name="op_id")
+	@JoinColumn(name="ops_id")
 	private OrderProduct op;
 	
-
-	public Order(double amount, String date, String status, String billingAdd, String shippingAdd) {
-		super();
-		this.amount = amount;
-		this.date = date;
-		this.status = status;
-		this.billingAdd = billingAdd;
-		this.shippingAdd = shippingAdd;
-	}
 	
 }
