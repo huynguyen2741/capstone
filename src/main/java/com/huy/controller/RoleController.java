@@ -17,9 +17,7 @@ public class RoleController {
 	private RoleService service;
 	
 	@PostMapping("/add")
-	public void addRole(@RequestBody Role role){
-		
-		
+	public void addRole(@RequestBody Role role){		
 		service.addRole(role);
 	}
 }

@@ -1,11 +1,15 @@
 package com.huy.model;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.huy.model.ProductCategory;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -25,7 +29,7 @@ import lombok.NoArgsConstructor;
 @Table(name="Product")
 public class Product {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="productId")
 	private int productId;
 	@Column(name="name")
@@ -41,24 +45,13 @@ public class Product {
 	@Column(name="image_url")
 	private String image_url;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="op_id")
 	private OrderProduct op;
 	
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="categoryId")
 	private ProductCategory productCategory;
-	
-	
-	public Product(String name, String description, double price, double weight, int quantity, String image_url) {
-		super();
-		this.name = name;
-		this.description = description;
-		this.price = price;
-		this.weight = weight;
-		this.quantity = quantity;
-		this.image_url = image_url;
-	}
 	
 	
 }
