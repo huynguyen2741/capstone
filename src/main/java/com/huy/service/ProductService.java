@@ -30,7 +30,9 @@ public class ProductService {
 	}
 	
 	public void addProduct(Product p) {
-		repo.save(p);
+//		System.out.print("Before id: " + prod.getProductId());
+		Product prod = repo.save(p);
+		System.out.print("\n\n\nAfter id: " + prod.getProductId());
 	}
 	
 	public void updateProductById(Product p ) {	

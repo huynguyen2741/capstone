@@ -35,45 +35,47 @@ public class UserController implements CommandLineRunner{
 	
 	@Autowired
 	private UserRepository repo;
-	
-	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 	private JavaMailSender javaMailSender;
 	
-	@Autowired private BCryptPasswordEncoder passwordEnc;
-	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
+
 //	customer join
 	  @PostMapping("/join") 
 	  public String addUser(@RequestBody User user) {
 		  
-		  User new_user = new User();
-		  new_user.setFirstName(user.getFirstName());
-		  new_user.setLastName(user.getLastName());
-		  new_user.setEmail(user.getEmail());
-		  new_user.setUsername(user.getUsername());
-		  new_user.setPassword(user.getPassword());
-		  new_user.setContact(user.getContact());
-		  new_user.setSSN(user.getSSN());
-		  new_user.setRoles(Arrays.asList(new Role("USER")));
-		  String password = passwordEnc.encode(user.getPassword());
-		  new_user.setPassword(password);
+//		  User new_user = new User();
+//		  new_user.setFirstName(user.getFirstName());
+//		  new_user.setLastName(user.getLastName());
+//		  new_user.setEmail(user.getEmail());
+//		  new_user.setUsername(user.getUsername());
+//		  new_user.setPassword(user.getPassword());
+//		  new_user.setContact(user.getContact());
+//		  new_user.setSSN(user.getSSN());
+//		  new_user.setRoles(Arrays.asList(new Role("USER")));
+//		  String password = passwordEnc.encode(user.getPassword());
+//		  new_user.setPassword(password);		  
+//		  
+//		  Address add = user.getAddresses().get(0);
+//		  add.setUser(new_user);
+//		  new_user.setAddresses(Arrays.asList(add));
+//		  
+//		  service.addUser(new_user);
+		  String password = passwordEncoder.encode(user.getPassword());
+		  user.setPassword(password);
+		  user.setRoles(Arrays.asList(new Role("USER")));
+		  service.addUser(user);
 		  
-		  
-		  Address add = user.getAddresses().get(0);
-		  add.setUser(new_user);
-		  new_user.setAddresses(Arrays.asList(add));
-	  	
-		  service.addUser(new_user);
-		  run();
+//		  run();
 		  
 		  return "<h1>Post join</h1>"; 
 	  }  
 	  
 	  @Override
 	  public void run(String... args) {
-		  sendEmail();
+//		  sendEmail();
 	  }
 	  
 	  void sendEmail() {
@@ -84,27 +86,15 @@ public class UserController implements CommandLineRunner{
 			javaMailSender.send(email);
 		}
 	 
-	@PostMapping("/{id}")
-	public void updateUserById(@PathVariable int id, @RequestBody User user){
-		user.setUserId(id);
-		service.updateUserById(user);
-	}
+//	@PostMapping("/{id}")
+//	public void updateUserById(@PathVariable int id, @RequestBody User user){
+//		user.setUserId(id);
+//		service.updateUserById(user);
+//	}
 //	Assume: all details are required for updating.
 	@PostMapping("/update/{username}")
 	public void updateUserByUsername(@PathVariable String username, @RequestBody User user){
-		User u = repo.findByUsername(username).get();
 		
-		user.setRoles(u.getRoles());
-		user.setUserId(u.getUserId());
-		user.setUsername(u.getUsername());
-//		if password is blank set to current password
-//		else hash and save new password
-		if(user.getPassword()==null) {
-			user.setPassword(u.getPassword());
-		}
-		else {
-			user.setPassword(passwordEncoder.encode(user.getPassword()));			
-		}
-		service.updateUserById(user);
+		service.updateUserByUsername(username,user);
 	}
 }

@@ -37,45 +37,49 @@ public class AdminController implements CommandLineRunner{
 	@Autowired
 	private UserService service;
 	
-	
-	
 	@Autowired
 	private JavaMailSender javaMailSender;
 	
-	@Autowired 
-	private BCryptPasswordEncoder passwordEnc;
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 	 
 
 	@PostMapping("/join") 
 	  public String addAdmin(@RequestBody User user) {
 
-		  User new_user = new User();
-		  new_user.setFirstName(user.getFirstName());
-		  new_user.setLastName(user.getLastName());
-		  new_user.setEmail(user.getEmail());
-		  new_user.setUsername(user.getUsername());
-		  new_user.setPassword(user.getPassword());
-		  new_user.setContact(user.getContact());
-		  new_user.setSSN(user.getSSN());
-		  new_user.setRoles(Arrays.asList(new Role("ADMIN")));		  
+//		  User new_user = new User();
+//		  new_user.setFirstName(user.getFirstName());
+//		  new_user.setLastName(user.getLastName());
+//		  new_user.setEmail(user.getEmail());
+//		  new_user.setUsername(user.getUsername());
+//		  new_user.setPassword(user.getPassword());
+//		  new_user.setContact(user.getContact());
+//		  new_user.setSSN(user.getSSN());
+//		  new_user.setRoles(Arrays.asList(new Role("ADMIN")));		  
+//		  
+//		  Address add = user.getAddresses().get(0);
+//		  add.setUser(new_user);
+//		  new_user.setAddresses(Arrays.asList(add));
+//
+//		  String password = passwordEnc.encode(user.getPassword());
+//	  	  new_user.setPassword(password);
+//	  	 
+//	  
+//		  service.addUser(new_user);
+//		  run();
 		  
-		  Address add = user.getAddresses().get(0);
-		  add.setUser(new_user);
-		  new_user.setAddresses(Arrays.asList(add));
-
-		  String password = passwordEnc.encode(user.getPassword());
-	  	  new_user.setPassword(password);
-	  	 
-	  
-		  service.addUser(new_user);
-		  run();
+		
+		String password = passwordEncoder.encode(user.getPassword());
+		  user.setPassword(password);
+		  user.setRoles(Arrays.asList(new Role("ADMIN")));
+		  service.addUser(user);
 		  
 		  return "<h1>Post ADMIN join</h1>"; 
 	  }
 	
 	 @Override
 	  public void run(String... args) {
-		  sendEmail();
+//		  sendEmail();
 	  }
 	  
 	  void sendEmail() {

@@ -40,22 +40,24 @@ public class ProductController {
 	}
 	@PostMapping("/add")
 	public String addProduct(@RequestBody Product p) {
-		Product prod= new Product();
-		
-		prod.setDescription(p.getDescription());
-		prod.setImage_url(p.getImage_url());
-		prod.setName(p.getName());
-		prod.setPrice(p.getPrice());
-		prod.setQuantity(p.getQuantity());
-		prod.setWeight(p.getWeight());
-		
-//		prod.setProductCategory(p.getProductCategory());
-		ProductCategory pc = p.getProductCategory();
-//		p.getProductCategory().setProduct(p);
-		pc.setProduct(p);
-		prod.setProductCategory(pc);
+//		Product prod= new Product();
+//		
+//		prod.setDescription(p.getDescription());
+//		prod.setImage_url(p.getImage_url());
+//		prod.setName(p.getName());
+//		prod.setPrice(p.getPrice());
+//		prod.setQuantity(p.getQuantity());
+//		prod.setWeight(p.getWeight());
+//		
+////		prod.setProductCategory(p.getProductCategory());
+//		ProductCategory pc = p.getProductCategory();
+////		p.getProductCategory().setProduct(p);
+//		pc.setProduct(p);
+//		prod.setProductCategory(pc);
 		
 		productService.addProduct(p);
+		
+		
 		return "<h1>Product Added</h1>";
 	}
 	@PostMapping("/{id}")

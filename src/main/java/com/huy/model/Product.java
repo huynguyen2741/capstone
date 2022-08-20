@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -45,9 +46,8 @@ public class Product {
 	@Column(name="image_url")
 	private String image_url;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="op_id")
-	private OrderProduct op;
+	@OneToMany (mappedBy="order",cascade=CascadeType.ALL)
+	private List<OrderProduct> ops;
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="categoryId")

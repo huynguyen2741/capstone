@@ -1,5 +1,7 @@
 package com.huy.controller;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,4 +48,9 @@ public class CartController {
 		service.updateItem(id,quantity);
 	}
 
+	@GetMapping("/checkout")
+	public String checkOut(Principal principal) {
+//		return principal.getName();
+		return service.checkOut(principal);
+	}
 }

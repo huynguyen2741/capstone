@@ -1,5 +1,8 @@
 package com.huy.service;
 
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -9,25 +12,42 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Service;
 
+import com.huy.model.Address;
 import com.huy.model.Cart;
 import com.huy.model.CartItem;
+import com.huy.model.Order;
+import com.huy.model.OrderProduct;
 import com.huy.model.Product;
+import com.huy.model.User;
+import com.huy.repo.OrderProductRepository;
+import com.huy.repo.OrderRepository;
 import com.huy.repo.ProductRepository;
+import com.huy.repo.UserRepository;
 
 @Service
 public class CartService {
 
 	@Autowired
-	private ProductRepository pRepo;
+	private ProductRepository productRepo;
+	
+	@Autowired
+	private OrderRepository orderRepo;
+	
+	@Autowired
+	private OrderProductRepository orderProductRepo;
+	
+	@Autowired
+	private UserRepository userRepo;
 	
 	private static Cart c = new Cart();
 	
 	
 //	add one item to the cart
 	public void addItem(int id) throws Exception {
-		Product p = pRepo.findById(id).get();
+		Product p = productRepo.findById(id).get();
 		if (p.getQuantity()<= 0) {
 			throw new Exception("No Stock");
 		}
@@ -46,7 +66,7 @@ public class CartService {
 			c.setItems(list);
 //			decrease inventory
 			p.setQuantity(p.getQuantity() - 1);
-			pRepo.save(p);
+			productRepo.save(p);
 		}	
 	}
 		
@@ -65,7 +85,7 @@ public class CartService {
 	
 //	delete the item from cart
 	public String deleteItem(int id) {
-		Product p = pRepo.findById(id).get();
+		Product p = productRepo.findById(id).get();
 //		If cart does not have item then return
 		if(!validate(c,p)) {
 			return "<h1>none</h1>";			
@@ -74,7 +94,10 @@ public class CartService {
 		List<CartItem>list = c.getItems();
 		for(CartItem l:list) {
 			if (l.getId() == p.getProductId()) {
+//				restore the inventory
+				p.setQuantity(l.getQuantity() + p.getQuantity());
 				list.remove(l);
+				productRepo.save(p);
 				break;
 			}
 		}
@@ -95,7 +118,7 @@ public class CartService {
 	
 	public void updateItem(int id, int quantity) {
 //		check if inventory is enough
-		Product p = pRepo.findById(id).get();
+		Product p = productRepo.findById(id).get();
 		if(!validate(c,p) || quantity > p.getQuantity()) {
 			return;			
 		}	
@@ -104,7 +127,51 @@ public class CartService {
 		i.setQuantity(i.getQuantity() + quantity);
 //		decrease the inventory
 		p.setQuantity(p.getQuantity() - quantity);
-		pRepo.save(p);
+		productRepo.save(p);
+		
+	}
+
+	public String checkOut(Principal principal) {
+//		find the current user's id to connect to the order entity.
+		User u = userRepo.findByUsername(principal.getName()).get();
+		
+//		get the current date
+		DateTimeFormatter converter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+		LocalDateTime now = LocalDateTime.now();
+		String dateNow = "";
+		dateNow = converter.format(now);
+		
+		String address = "";
+		for (Address a : u.getAddresses()) {
+			address += a.getStreet() +" "  + a.getAptNumber() + " " + a.getCity() + " " + a.getState() + " " + a.getCountry() + " " + a.getZipcode() + " ";
+		}
+		
+		
+//		create an Order to add to database
+		Order o = new Order();
+		o.setAmount(c.getCartTotal());
+		o.setStatus("Ordered");
+		o.setUser(u);
+		o.setDate(dateNow);
+		o.setShippingAdd(address);
+		o.setBillingAdd(address);
+		
+//		save and get the order id
+//		int orderId = orderRepo.save(o).getOrderId();
+		o = orderRepo.save(o);
+		
+		List<CartItem> itemList = c.getItems();
+		for(CartItem item: itemList) {
+			OrderProduct op = new OrderProduct();
+			op.setOrder(o);
+			op.setProduct(productRepo.findById(item.getId()).get());
+			op.setOrder_quantity(item.getQuantity());
+			orderProductRepo.save(op);
+		}
+		
+		c = new Cart();
+		
+		return "<h1>Check out complete</h1>";
 	}
 
 }
