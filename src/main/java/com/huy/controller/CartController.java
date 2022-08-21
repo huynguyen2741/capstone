@@ -3,6 +3,7 @@ package com.huy.controller;
 import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +33,7 @@ public class CartController {
 	}
 
 //	get all cart info
+	@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
 	@GetMapping("/total")
 	public String getCart() {
 		return service.getCart();
@@ -43,7 +45,7 @@ public class CartController {
 	}
 
 //	update the quantity for one item. 
-	@PostMapping("add/{id}/{quantity}")
+	@PostMapping("/add/{id}/{quantity}")
 	public void updateQuantity(@PathVariable int id, @PathVariable int quantity) {
 		service.updateItem(id,quantity);
 	}

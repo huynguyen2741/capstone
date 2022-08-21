@@ -45,7 +45,7 @@ public class UserService implements UserDetailsService{
 	
 	public void addUser(User user) {
 		
-		user.setRoles(Arrays.asList(new Role("USER")));	
+			
 		
 		
 		Address user_a = user.getAddresses().get(0);

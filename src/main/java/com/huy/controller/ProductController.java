@@ -50,9 +50,9 @@ public class ProductController {
 //		prod.setWeight(p.getWeight());
 //		
 ////		prod.setProductCategory(p.getProductCategory());
-//		ProductCategory pc = p.getProductCategory();
-////		p.getProductCategory().setProduct(p);
-//		pc.setProduct(p);
+		ProductCategory pc = p.getProductCategory();
+//		p.getProductCategory().setProduct(p);
+		pc.setProduct(p);
 //		prod.setProductCategory(pc);
 		
 		productService.addProduct(p);

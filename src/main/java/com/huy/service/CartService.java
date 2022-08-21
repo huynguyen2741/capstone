@@ -12,7 +12,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.format.datetime.DateFormatter;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.huy.model.Address;
@@ -28,7 +31,7 @@ import com.huy.repo.ProductRepository;
 import com.huy.repo.UserRepository;
 
 @Service
-public class CartService {
+public class CartService implements CommandLineRunner{
 
 	@Autowired
 	private ProductRepository productRepo;
@@ -41,6 +44,9 @@ public class CartService {
 	
 	@Autowired
 	private UserRepository userRepo;
+	
+	@Autowired
+	private JavaMailSender javaMailSender;
 	
 	private static Cart c = new Cart();
 	
@@ -157,7 +163,6 @@ public class CartService {
 		o.setBillingAdd(address);
 		
 //		save and get the order id
-//		int orderId = orderRepo.save(o).getOrderId();
 		o = orderRepo.save(o);
 		
 		List<CartItem> itemList = c.getItems();
@@ -170,8 +175,21 @@ public class CartService {
 		}
 		
 		c = new Cart();
-		
+		run();
 		return "<h1>Check out complete</h1>";
 	}
+	
+	@Override
+	  public void run(String... args) {
+//		  sendEmail();
+	  }
+	  
+	  void sendEmail() {
+			SimpleMailMessage email = new SimpleMailMessage();
+			email.setTo("sample@gmail.com");
+			email.setSubject("Add User");
+			email.setText("Check out completed");
+			javaMailSender.send(email);
+		}
 
 }
