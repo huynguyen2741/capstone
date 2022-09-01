@@ -47,17 +47,17 @@ public class UserConfig extends WebSecurityConfigurerAdapter{
 			
 			  http.csrf().disable();
 			  
-			  http			
-			  .authorizeRequests().antMatchers("/admin/join").permitAll()
-			  .and().authorizeRequests().antMatchers("/user/join").permitAll()
-			  .and().authorizeRequests().antMatchers("/product/products").hasAnyAuthority("ADMIN","USER")
-			  .and().authorizeRequests().antMatchers("/cart/total").hasAnyAuthority("ADMIN","USER")
-			  .and().authorizeRequests().antMatchers("/user/*").hasAuthority("USER")
-			  .and().authorizeRequests().antMatchers("/cart/*").hasAuthority("USER")			  
-			  .and().authorizeRequests().antMatchers("/admin/*").hasAuthority("ADMIN")
-			  .and().authorizeRequests().antMatchers("/product/*").hasAuthority("ADMIN")		  
-			  .and().authorizeRequests().anyRequest().authenticated()
-			  .and().formLogin().and().httpBasic();
+//			  http			
+//			  .authorizeRequests().antMatchers("/admin/join").permitAll()
+//			  .and().authorizeRequests().antMatchers("/user/join").permitAll()
+//			  .and().authorizeRequests().antMatchers("/product/products").hasAnyAuthority("ADMIN","USER")
+//			  .and().authorizeRequests().antMatchers("/cart/total").hasAnyAuthority("ADMIN","USER")
+//			  .and().authorizeRequests().antMatchers("/user/*").hasAuthority("USER")
+//			  .and().authorizeRequests().antMatchers("/cart/*").hasAuthority("USER")			  
+//			  .and().authorizeRequests().antMatchers("/admin/*").hasAuthority("ADMIN")
+//			  .and().authorizeRequests().antMatchers("/product/*").hasAuthority("ADMIN")		  
+//			  .and().authorizeRequests().anyRequest().authenticated()
+//			  .and().formLogin().and().httpBasic();
 			  
 	  }
 
