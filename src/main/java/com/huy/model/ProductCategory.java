@@ -16,8 +16,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+//@AllArgsConstructor
+//@NoArgsConstructor
 @Entity
 @Table(name="ProductCategory")
 public class ProductCategory {
@@ -31,6 +31,30 @@ public class ProductCategory {
 	@OneToOne
 	@JoinColumn(name="productId")
 	private Product product;
+	public int getCategoryId() {
+		return categoryId;
+	}
+	public void setCategoryId(int categoryId) {
+		this.categoryId = categoryId;
+	}
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
+	}
+	public Product getProduct() {
+		return product;
+	}
+	public void setProduct(Product product) {
+		this.product = product;
+	}
+	public ProductCategory(int categoryId, String category, Product product) {
+		super();
+		this.categoryId = categoryId;
+		this.category = category;
+		this.product = product;
+	}
 		
 	
 }
