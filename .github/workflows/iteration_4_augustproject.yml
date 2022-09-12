@@ -49,5 +49,5 @@ jobs:
         with:
           app-name: 'AugustProject'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_DF94DFD0A7514324809381A4EE13DDAA }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E349C60968B042068A11BCC01A97CC47 }}
           package: '*.jar'
